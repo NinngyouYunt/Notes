@@ -1,0 +1,42 @@
+<html>
+  <head></head>
+  <body>
+    <input type="number" id="num">
+    <input type="button" onclick="myFunction(1)" value="Then">
+    <input type="button" onclick="myFunction(2)" value="Try/Catch">
+    <script>
+
+      // A promise that resolve when input is positive, otherwise reject
+      const myFunction = (mode) => {
+        console.log("----------");
+        let value = document.getElementById("num").value;
+
+        (async function doThis(number) {
+          // This promise reject if number is negative and resolve otherwise, the promise return after 1 seconds
+          let promise = new Promise((resolve, reject) => {
+            if (number < 0)
+              setTimeout(() => reject(new Error("Input Must Be Positive!")), 1000);
+            else 
+              setTimeout(() => resolve(`Your input is ${value}`), 1000);
+          });
+          let result;
+          if (mode == 1) {  // Using then to respond to promise, result is undefined after then
+            result = await promise.then((res) => console.log("Using then: " + res), (res) => console.log("Using then: " + res)); // result is undefined after this
+            console.log("After then: ", result);
+          } else if (mode == 2) { // Using try/catch to respond to promise, result keeps value if success, and result is undefined if an error is throw
+            try {
+              result = await promise;
+              console.log("Using try/catch: " + result); // result keeps value after this
+            } catch(err) {
+              console.log("Using try/catch: " + err); // result is undefined after this
+            }
+            console.log("After try/catch: ", result);
+          }
+          console.log("-----END of IIFE-----");
+        })(value);
+        console.log("-----END of Script-----");
+      }
+      
+    </script>
+  </body>
+</html>
